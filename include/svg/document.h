@@ -1,5 +1,5 @@
-#ifndef SVG_SRC_DOCUMENT_H_
-#define SVG_SRC_DOCUMENT_H_
+#ifndef SVG_DOCUMENT_H_
+#define SVG_DOCUMENT_H_
 
 #include <ostream>
 #include <variant>
@@ -23,4 +23,4 @@ class Document {
 };
 }
 
-#endif // SVG_SRC_DOCUMENT_H_
+#endif // SVG_DOCUMENT_H_

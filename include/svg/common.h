@@ -1,5 +1,5 @@
-#ifndef SVG_SRC_COMMON_H_
-#define SVG_SRC_COMMON_H_
+#ifndef SVG_COMMON_H_
+#define SVG_COMMON_H_
 
 #include <ostream>
 #include <cstdint>
@@ -32,4 +32,4 @@ std::ostream &operator<<(std::ostream &out, const Color &col);
 static const Color kNoneColor;
 }
 
-#endif // SVG_SRC_COMMON_H_
+#endif // SVG_COMMON_H_
