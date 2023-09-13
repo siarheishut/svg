@@ -36,11 +36,21 @@ Moreover, all figures have the same common properties:
 | green | int  | Green intensity (from 0 to 255) | 0                |
 | blue  | int  | Blue intensity (from 0 to 255)  | 0                |
 
+### svg::Rgba
+
+<font size="3">Class with the following fields: </font>
+
+| Field | Type  | Description                     | Value by default |
+|-------|-------|---------------------------------|------------------|
+| red   | int   | Red intensity (from 0 to 255)   | 0                |
+| green | int   | Green intensity (from 0 to 255) | 0                |
+| blue  | int   | Blue intensity (from 0 to 255)  | 0                |
+| alpha | float | Alpha channel (from 0 to 1)     | 1.0              |
+
 ### svg::Color
 
-<font size="3">Object of this type may be initialized with object of either `std::string` or `svg::Rgb` type and equals
-to `"none"` by
-default. </font>
+<font size="3">Object of this type may be initialized with object of either `std::string`, `svg::Rgb` or `svg::Rgba`
+type and equals to `"none"` by default. </font>
 
 <br>
 
