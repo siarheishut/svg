@@ -1,11 +1,11 @@
-#include "figures.h"
+#include "svg/figures.h"
 
 #include <ostream>
 #include <utility>
 #include <cstdint>
 #include <string>
 
-#include "common.h"
+#include "svg/common.h"
 
 namespace svg {
 void Circle::Render(std::ostream &out) const {

@@ -1,10 +1,10 @@
-#include "document.h"
+#include "svg/document.h"
 
 #include <ostream>
 #include <variant>
 #include <utility>
 
-#include "figures.h"
+#include "svg/figures.h"
 
 namespace svg {
 void Document::Add(const Object &object) {

@@ -8,7 +8,7 @@ add_library(svg
         src/document.cpp
         src/figures.cpp)
 
-target_include_directories(svg PUBLIC include/svg)
+target_include_directories(svg PUBLIC include)
 # svg config end
 
 # tests start
@@ -31,6 +31,6 @@ add_executable(svg_tests
 )
 
 target_link_libraries(svg_tests GTest::gtest_main)
-target_include_directories(svg_tests PUBLIC . include/svg)
+target_include_directories(svg_tests PUBLIC . include)
 gtest_discover_tests(svg_tests)
 # tests end
