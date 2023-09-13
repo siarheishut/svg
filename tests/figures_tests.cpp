@@ -5,9 +5,9 @@
 
 #include "gtest/gtest.h"
 
-#include "common.h"
-#include "figures.h"
-#include "document.h"
+#include "svg/common.h"
+#include "svg/figures.h"
+#include "svg/document.h"
 
 #define PREFIX "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"                \
                "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
