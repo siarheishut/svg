@@ -233,9 +233,9 @@ TEST(TestFigures, TestText) {
       TestCase{
           .name = "Set fill-color",
           .text = svg::Text{}
-              .SetFillColor(svg::Color{"color"}),
+              .SetFillColor(svg::Rgba{1, 2, 3, 0.52}),
           .want = SVG_DOC(
-                      "<text fill=\"color\" stroke=\"none\" stroke-width=\"1\" "
+                      "<text fill=\"rgba(1,2,3,0.52)\" stroke=\"none\" stroke-width=\"1\" "
                       "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
                       "></text>")
       },
