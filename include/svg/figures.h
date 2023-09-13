@@ -1,5 +1,5 @@
-#ifndef SVG_SRC_FIGURES_H_
-#define SVG_SRC_FIGURES_H_
+#ifndef SVG_FIGURES_H_
+#define SVG_FIGURES_H_
 
 #include <cstdint>
 #include <optional>
@@ -125,4 +125,4 @@ class Text : public Figure<Text> {
 };
 }
 
-#endif // SVG_SRC_FIGURES_H_
+#endif // SVG_FIGURES_H_
