@@ -113,6 +113,8 @@ class Text : public Figure<Text> {
   Text &SetFontSize(uint32_t font_size);
   Text &SetFontFamily(const std::string &font_family);
   Text &SetFontFamily(std::string &&font_family);
+  Text &SetFontWeight(const std::string &font_weight);
+  Text &SetFontWeight(std::string &&font_weight);
   Text &SetData(const std::string &text);
   Text &SetData(std::string &&text);
 
@@ -121,6 +123,7 @@ class Text : public Figure<Text> {
   Point offset_;
   uint32_t font_size_ = 1;
   std::optional<std::string> font_family_;
+  std::optional<std::string> font_weight_;
   std::string text_;
 };
 }
