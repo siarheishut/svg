@@ -96,6 +96,7 @@ Fields:
 | offset      | svg::Point  | See above.       |
 | font size   | int         | 1                |
 | font family | std::string | null             |
+| font weight | std::string | null             |
 | text        | std::string | ""               |
 
 Methods:
@@ -106,6 +107,7 @@ Methods:
 | SetOffset     | svg::Point     | Sets offset from reference point. |
 | SetFontSize   | float          | Sets font size.                   |
 | SetFontFamily | std::string    | Sets font family.                 |
+| SetFontWeight | std::string    | Sets font weight.                 |
 | SetData       | std::string    | Sets text message.                |
 
 #### Common fields and methods:
