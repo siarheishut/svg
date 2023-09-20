@@ -59,6 +59,9 @@ void Text::Render(std::ostream &out) const {
   if (font_family_.has_value()) {
     out << " font-family=\"" << *font_family_ << "\"";
   }
+  if (font_weight_.has_value()) {
+    out << " font-weight=\"" << *font_weight_ << "\"";
+  }
   out << '>' << text_ << "</text>";
 }
 
@@ -83,6 +86,15 @@ Text &Text::SetFontFamily(const std::string &font_family) {
 }
 Text &Text::SetFontFamily(std::string &&font_family) {
   font_family_ = std::move(font_family);
+  return *this;
+}
+
+Text &Text::SetFontWeight(const std::string &font_weight) {
+  font_weight_ = font_weight;
+  return *this;
+}
+Text &Text::SetFontWeight(std::string &&font_weight) {
+  font_weight_ = std::move(font_weight);
   return *this;
 }
 

@@ -303,6 +303,15 @@ TEST(TestFigures, TestText) {
                       "></text>")
       },
       TestCase{
+          .name = "Set font-weight",
+          .text = svg::Text{}
+              .SetFontWeight("bold"),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\" "
+                      "font-weight=\"bold\"></text>")
+      },
+      TestCase{
           .name = "Set data",
           .text = svg::Text{}
               .SetData("some text"),
@@ -324,13 +333,15 @@ TEST(TestFigures, TestText) {
               .SetData("some text")
               .SetStrokeLineJoin("linejoin1")
               .SetOffset({.x = 12, .y = 15})
-              .SetFontFamily("family1"),
+              .SetFontFamily("family1")
+              .SetFontWeight("bold"),
           .want = SVG_DOC(
                       "<text fill=\"rgb(10,20,30)\" stroke=\"rgb(93,31,17)\" "
                       "stroke-width=\"94\" stroke-linecap=\"linecap1\" "
                       "stroke-linejoin=\"linejoin1\" x=\"-131.101\" y=\"91.73\" "
                       "dx=\"12\" dy=\"15\" font-size=\"1\" "
-                      "font-family=\"family1\">some text</text>")
+                      "font-family=\"family1\" font-weight=\"bold\">some text"
+                      "</text>")
       },
   };
 
