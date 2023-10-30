@@ -2,8 +2,10 @@
 #define SVG_FIGURES_H_
 
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <ostream>
+#include <variant>
 #include <vector>
 #include <string>
 #include <utility>
@@ -11,6 +13,13 @@
 #include "common.h"
 
 namespace svg {
+class Circle;
+class Polyline;
+class Text;
+class Rectangle;
+class Section;
+using Object = std::variant<Circle, Polyline, Text, Rectangle, Section>;
+
 template<typename FigureType>
 class Figure {
  public:
@@ -143,6 +152,26 @@ class Rectangle : public Figure<Rectangle> {
   double height_ = 0;
 };
 
+class Section {
+ public:
+  friend class SectionBuilder;
+  void Render(std::ostream &out) const;
+
+ private:
+  explicit Section(std::vector<Object> objects);
+
+  std::shared_ptr<std::vector<Object>> objects_;
+};
+
+class SectionBuilder {
+ public:
+  SectionBuilder &Add(const Object &object);
+  SectionBuilder &Add(Object &&object);
+  Section Build();
+
+ private:
+  std::vector<Object> objects_;
+};
 }
 
 #endif // SVG_FIGURES_H_
