@@ -4,6 +4,7 @@
 #include <utility>
 #include <cstdint>
 #include <string>
+#include <memory>
 
 #include "svg/common.h"
 
@@ -131,4 +132,29 @@ Rectangle &Rectangle::SetHeight(double height) {
   height_ = height;
   return *this;
 }
+}
+
+void svg::Section::Render(std::ostream &out) const {
+  for (auto &figure : *objects_) {
+    std::visit([&out](auto &&figure) {
+      figure.Render(out);
+    }, figure);
+  }
+}
+
+svg::Section::Section(std::vector<Object> objects)
+    : objects_(std::make_shared<std::vector<Object>>(std::move(objects))) {}
+
+svg::SectionBuilder &svg::SectionBuilder::Add(const svg::Object &object) {
+  objects_.push_back(object);
+  return *this;
+}
+
+svg::SectionBuilder &svg::SectionBuilder::Add(svg::Object &&object) {
+  objects_.push_back(std::move(object));
+  return *this;
+}
+
+svg::Section svg::SectionBuilder::Build() {
+  return Section(std::move(objects_));
 }
