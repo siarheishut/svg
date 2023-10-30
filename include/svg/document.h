@@ -7,7 +7,7 @@
 #include "figures.h"
 
 namespace svg {
-class Document {
+class Document final {
  public:
   Document() = default;
 
