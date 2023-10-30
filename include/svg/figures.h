@@ -126,6 +126,23 @@ class Text : public Figure<Text> {
   std::optional<std::string> font_weight_;
   std::string text_;
 };
+
+class Rectangle : public Figure<Rectangle> {
+ public:
+  Rectangle() = default;
+
+  void Render(std::ostream &out) const;
+
+  Rectangle &SetPoint(Point point);
+  Rectangle &SetWidth(double width);
+  Rectangle &SetHeight(double height);
+
+ private:
+  Point point_;
+  double width_ = 0;
+  double height_ = 0;
+};
+
 }
 
 #endif // SVG_FIGURES_H_

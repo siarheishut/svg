@@ -106,4 +106,29 @@ Text &Text::SetData(std::string &&text) {
   text_ = std::move(text);
   return *this;
 }
+
+void Rectangle::Render(std::ostream &out) const {
+  out << "<rect ";
+  out << "x=\"" << point_.x << "\" " <<
+      "y=\"" << point_.y << "\" " <<
+      "width=\"" << width_ << "\" " <<
+      "height=\"" << height_ << "\" ";
+  RenderProperties(out);
+  out << "/>";
+}
+
+Rectangle &Rectangle::SetPoint(Point point) {
+  point_ = point;
+  return *this;
+}
+
+Rectangle &Rectangle::SetWidth(double width) {
+  width_ = width;
+  return *this;
+}
+
+Rectangle &Rectangle::SetHeight(double height) {
+  height_ = height;
+  return *this;
+}
 }

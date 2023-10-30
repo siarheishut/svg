@@ -357,6 +357,111 @@ TEST(TestFigures, TestText) {
   }
 }
 
+TEST(TestFigures, TestRectangle) {
+  struct TestCase {
+    std::string name;
+    svg::Rectangle rect;
+    std::string want;
+  };
+
+  std::vector<TestCase> test_cases{
+      TestCase{
+          .name = "Default ctor",
+          .rect = svg::Rectangle{},
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set point",
+          .rect = svg::Rectangle{}
+              .SetPoint({.x = 1.1, .y = 2.2}),
+          .want = SVG_DOC("<rect x=\"1.1\" y=\"2.2\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set width",
+          .rect = svg::Rectangle{}
+              .SetWidth(11.9),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"11.9\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set height",
+          .rect = svg::Rectangle{}
+              .SetHeight(9.1),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"9.1\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set fill-color",
+          .rect = svg::Rectangle{}
+              .SetFillColor(svg::Rgba{3, 2, 1, 0.4}),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"rgba(3,2,1,0.4)\" stroke=\"none\" "
+                          "stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set stroke-color",
+          .rect = svg::Rectangle{}
+              .SetStrokeColor(svg::Color{"color"}),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"color\" stroke-width=\"1\""
+                          " />")
+      },
+      TestCase{
+          .name = "Set stroke-width",
+          .rect = svg::Rectangle{}
+              .SetStrokeWidth(1.3),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1.3\" "
+                          "/>")
+      },
+      TestCase{
+          .name = "Set stroke-linecap",
+          .rect = svg::Rectangle{}
+              .SetStrokeLineCap("linecap"),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                          "stroke-linecap=\"linecap\" />")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin",
+          .rect = svg::Rectangle{}
+              .SetStrokeLineJoin("linejoin"),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                          "stroke-linejoin=\"linejoin\" />")
+      },
+      TestCase{
+          .name = "Set all",
+          .rect = svg::Rectangle{}
+              .SetFillColor(svg::Rgba{3, 2, 1, 0.4})
+              .SetStrokeColor(svg::Color{"color"})
+              .SetStrokeWidth(1.3)
+              .SetStrokeLineCap("linecap")
+              .SetStrokeLineJoin("linejoin")
+              .SetPoint({.x = 4, .y = 2})
+              .SetWidth(11)
+              .SetHeight(7),
+          .want = SVG_DOC("<rect x=\"4\" y=\"2\" width=\"11\" height=\"7\" "
+                          "fill=\"rgba(3,2,1,0.4)\" stroke=\"color\" "
+                          "stroke-width=\"1.3\" stroke-linecap=\"linecap\" "
+                          "stroke-linejoin=\"linejoin\" />")
+      },
+  };
+
+  for (auto &[name, rect, want] : test_cases) {
+    svg::Document doc;
+    doc.Add(std::move(rect));
+
+    std::ostringstream ss;
+    doc.Render(ss);
+    auto got = ss.str();
+
+    EXPECT_EQ(want, got) << name;
+  }
+}
+
 TEST(TestDocument, TestDocument) {
   struct TestCase {
     std::string name;
@@ -417,9 +522,25 @@ TEST(TestDocument, TestDocument) {
                       "></text>")
       },
       TestCase{
+          .name = "Several rectangles",
+          .figures = {svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
+                      svg::Rectangle{}, svg::Rectangle{}},
+          .want = SVG_DOC(
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+      },
+      TestCase{
           .name = "Different figures",
           .figures = {svg::Circle{}, svg::Polyline{}, svg::Circle{},
-                      svg::Text{}},
+                      svg::Text{}, svg::Rectangle{}, svg::Rectangle{}},
           .want = SVG_DOC(
                       "<circle fill=\"none\" stroke=\"none\" "
                       "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
@@ -429,7 +550,11 @@ TEST(TestDocument, TestDocument) {
                       "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
                       "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
                       "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"),
+                      "></text>"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"),
       },
   };
 
