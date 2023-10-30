@@ -1,10 +1,10 @@
 #ifndef SVG_COMMON_H_
 #define SVG_COMMON_H_
 
-#include <ostream>
 #include <cstdint>
-#include <variant>
+#include <ostream>
 #include <string>
+#include <variant>
 
 namespace svg {
 struct Point {

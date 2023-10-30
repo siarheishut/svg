@@ -1,8 +1,8 @@
 #include "svg/document.h"
 
 #include <ostream>
-#include <variant>
 #include <utility>
+#include <variant>
 
 #include "svg/figures.h"
 

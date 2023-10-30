@@ -1,13 +1,13 @@
-#include <string>
-#include <vector>
 #include <sstream>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "gtest/gtest.h"
 
 #include "svg/common.h"
-#include "svg/figures.h"
 #include "svg/document.h"
+#include "svg/figures.h"
 
 #define PREFIX "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"                \
                "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
