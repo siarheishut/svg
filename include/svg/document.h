@@ -8,7 +8,7 @@
 #include "figures.h"
 
 namespace svg {
-using Object = std::variant<Circle, Polyline, Text>;
+using Object = std::variant<Circle, Polyline, Text, Rectangle>;
 
 class Document {
  public:
