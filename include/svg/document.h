@@ -2,14 +2,11 @@
 #define SVG_DOCUMENT_H_
 
 #include <ostream>
-#include <variant>
 #include <vector>
 
 #include "figures.h"
 
 namespace svg {
-using Object = std::variant<Circle, Polyline, Text, Rectangle>;
-
 class Document {
  public:
   Document() = default;

@@ -14,6 +14,19 @@
 #define POSTFIX "</svg>"
 #define SVG_DOC(body) PREFIX body POSTFIX
 
+#define DEFAULT_CIRCLE "<circle fill=\"none\" stroke=\"none\" "             \
+                       "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
+
+#define DEFAULT_POLYLINE "<polyline fill=\"none\" stroke=\"none\" "         \
+                         "stroke-width=\"1\" points=\"\"/>"
+
+#define DEFAULT_TEXT "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" " \
+                     "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""       \
+                     "></text>"
+
+#define DEFAULT_RECTANGLE "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "    \
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
+
 TEST(TestFigures, TestCircle) {
   struct TestCase {
     std::string name;
@@ -25,9 +38,7 @@ TEST(TestFigures, TestCircle) {
       TestCase{
           .name = "Default ctor",
           .circle = svg::Circle{},
-          .want = SVG_DOC(
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>")
+          .want = SVG_DOC(DEFAULT_CIRCLE)
       },
       TestCase{
           .name = "Set fill-color",
@@ -121,9 +132,8 @@ TEST(TestFigures, TestPolyline) {
       TestCase{
           .name = "Default ctor",
           .polyline = svg::Polyline{},
-          .want = SVG_DOC(
-                      "<polyline fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" points=\"\"/>")
+          .want = SVG_DOC(DEFAULT_POLYLINE)
+
       },
       TestCase{
           .name = "Set fill-color",
@@ -225,10 +235,7 @@ TEST(TestFigures, TestText) {
       TestCase{
           .name = "Default ctor",
           .text = svg::Text{},
-          .want = SVG_DOC(
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>")
+          .want = SVG_DOC(DEFAULT_TEXT)
       },
       TestCase{
           .name = "Set fill-color",
@@ -368,8 +375,7 @@ TEST(TestFigures, TestRectangle) {
       TestCase{
           .name = "Default ctor",
           .rect = svg::Rectangle{},
-          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+          .want = SVG_DOC(DEFAULT_RECTANGLE)
       },
       TestCase{
           .name = "Set point",
@@ -462,6 +468,60 @@ TEST(TestFigures, TestRectangle) {
   }
 }
 
+TEST(TestSection, TestSection) {
+  struct TestCase {
+    std::string name;
+    std::vector<svg::Object> figures;
+    std::string want;
+  };
+
+  std::vector<TestCase> test_cases{
+      TestCase{
+          .name = "Empty section",
+          .want = SVG_DOC()
+      },
+      TestCase{
+          .name = "Base case",
+          .figures = {svg::Circle{}, svg::Circle{}, svg::Circle{},
+                      svg::Text{}, svg::Text{}, svg::Text{},
+                      svg::SectionBuilder{}
+                          .Add(svg::Circle{})
+                          .Add(svg::Text{})
+                          .Add(svg::SectionBuilder{}
+                                   .Add(svg::Polyline{})
+                                   .Add(svg::Polyline{})
+                                   .Add(svg::Rectangle{})
+                                   .Add(svg::SectionBuilder{}.Build())
+                                   .Build())
+                          .Build(),
+                      svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
+                      svg::Text{}, svg::Text{}, svg::Text{}},
+          .want = SVG_DOC(DEFAULT_CIRCLE DEFAULT_CIRCLE DEFAULT_CIRCLE
+                              DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT
+                              DEFAULT_CIRCLE DEFAULT_TEXT DEFAULT_POLYLINE
+                              DEFAULT_POLYLINE DEFAULT_RECTANGLE
+                              DEFAULT_RECTANGLE DEFAULT_RECTANGLE
+                              DEFAULT_RECTANGLE DEFAULT_TEXT DEFAULT_TEXT
+                              DEFAULT_TEXT)
+      },
+  };
+
+  for (auto &[name, figures, want] : test_cases) {
+    svg::SectionBuilder builder;
+    for (auto &figure : figures) {
+      builder.Add(std::move(figure));
+    }
+
+    svg::Document doc;
+    doc.Add(builder.Build());
+    std::ostringstream ss;
+    doc.Render(ss);
+
+    auto got = ss.str();
+    EXPECT_EQ(want, got) << name;
+  }
+}
+
 TEST(TestDocument, TestDocument) {
   struct TestCase {
     std::string name;
@@ -480,81 +540,56 @@ TEST(TestDocument, TestDocument) {
           .figures = {svg::Circle{}, svg::Circle{}, svg::Circle{},
                       svg::Circle{}},
           .want = SVG_DOC(
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>")
+                      DEFAULT_CIRCLE DEFAULT_CIRCLE DEFAULT_CIRCLE
+                      DEFAULT_CIRCLE)
       },
       TestCase{
           .name = "Several polylines",
           .figures = {svg::Polyline{}, svg::Polyline{}, svg::Polyline{}},
-          .want = SVG_DOC(
-                      "<polyline fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" points=\"\"/>"
-                      "<polyline fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" points=\"\"/>"
-                      "<polyline fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" points=\"\"/>")
+          .want = SVG_DOC(DEFAULT_POLYLINE DEFAULT_POLYLINE DEFAULT_POLYLINE)
       },
       TestCase{
           .name = "Several texts",
           .figures = {svg::Text{}, svg::Text{}, svg::Text{}, svg::Text{},
                       svg::Text{}},
           .want = SVG_DOC(
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>")
+                      DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT
+                      DEFAULT_TEXT)
+
       },
       TestCase{
           .name = "Several rectangles",
           .figures = {svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
                       svg::Rectangle{}, svg::Rectangle{}},
           .want = SVG_DOC(
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
+                      DEFAULT_RECTANGLE DEFAULT_RECTANGLE DEFAULT_RECTANGLE
+                      DEFAULT_RECTANGLE DEFAULT_RECTANGLE)
+      },
+      TestCase{
+          .name = "Several sections",
+          .figures = {svg::SectionBuilder{}.Build(),
+                      svg::SectionBuilder{}
+                          .Add(svg::Circle{})
+                          .Add(svg::Text{})
+                          .Build(),
+                      svg::SectionBuilder{}
+                          .Add(svg::Polyline{})
+                          .Add(svg::Rectangle{})
+                          .Build()},
+          .want = SVG_DOC(
+                      DEFAULT_CIRCLE DEFAULT_TEXT DEFAULT_POLYLINE
+                      DEFAULT_RECTANGLE)
       },
       TestCase{
           .name = "Different figures",
           .figures = {svg::Circle{}, svg::Polyline{}, svg::Circle{},
-                      svg::Text{}, svg::Rectangle{}, svg::Rectangle{}},
+                      svg::Text{}, svg::Rectangle{},
+                      svg::SectionBuilder{}.Add(svg::Polyline{}).Build(),
+                      svg::Rectangle{}},
           .want = SVG_DOC(
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
-                      "<polyline fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" points=\"\"/>"
-                      "<circle fill=\"none\" stroke=\"none\" "
-                      "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>"
-                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"
-                      "<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
-                      "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />"),
+                      DEFAULT_CIRCLE DEFAULT_POLYLINE DEFAULT_CIRCLE
+                      DEFAULT_TEXT DEFAULT_RECTANGLE DEFAULT_POLYLINE
+                      DEFAULT_RECTANGLE),
       },
   };
 
@@ -568,6 +603,6 @@ TEST(TestDocument, TestDocument) {
     doc.Render(ss);
     auto got = ss.str();
 
-    EXPECT_EQ(want, got);
+    EXPECT_EQ(want, got) << name;
   }
 }
