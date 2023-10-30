@@ -19,8 +19,8 @@ void Document::Render(std::ostream &out) const {
          "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">";
 
   for (auto &object : objects_) {
-    std::visit([&out](auto &&figure) {
-      figure.Render(out);
+    std::visit([&out](auto &&obj) {
+      obj.Render(out);
     }, object);
   }
 
