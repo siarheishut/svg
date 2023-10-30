@@ -471,7 +471,7 @@ TEST(TestFigures, TestRectangle) {
 TEST(TestSection, TestSection) {
   struct TestCase {
     std::string name;
-    std::vector<svg::Object> figures;
+    std::vector<svg::Object> objects;
     std::string want;
   };
 
@@ -482,7 +482,7 @@ TEST(TestSection, TestSection) {
       },
       TestCase{
           .name = "Base case",
-          .figures = {svg::Circle{}, svg::Circle{}, svg::Circle{},
+          .objects = {svg::Circle{}, svg::Circle{}, svg::Circle{},
                       svg::Text{}, svg::Text{}, svg::Text{},
                       svg::SectionBuilder{}
                           .Add(svg::Circle{})
@@ -506,10 +506,10 @@ TEST(TestSection, TestSection) {
       },
   };
 
-  for (auto &[name, figures, want] : test_cases) {
+  for (auto &[name, objects, want] : test_cases) {
     svg::SectionBuilder builder;
-    for (auto &figure : figures) {
-      builder.Add(std::move(figure));
+    for (auto &object : objects) {
+      builder.Add(std::move(object));
     }
 
     svg::Document doc;
@@ -525,19 +525,19 @@ TEST(TestSection, TestSection) {
 TEST(TestDocument, TestDocument) {
   struct TestCase {
     std::string name;
-    std::vector<svg::Object> figures;
+    std::vector<svg::Object> objects;
     std::string want;
   };
 
   std::vector<TestCase> test_cases{
       TestCase{
           .name = "Empty Document",
-          .figures = {},
+          .objects = {},
           .want = SVG_DOC("")
       },
       TestCase{
           .name = "Several circles",
-          .figures = {svg::Circle{}, svg::Circle{}, svg::Circle{},
+          .objects = {svg::Circle{}, svg::Circle{}, svg::Circle{},
                       svg::Circle{}},
           .want = SVG_DOC(
                       DEFAULT_CIRCLE DEFAULT_CIRCLE DEFAULT_CIRCLE
@@ -545,12 +545,12 @@ TEST(TestDocument, TestDocument) {
       },
       TestCase{
           .name = "Several polylines",
-          .figures = {svg::Polyline{}, svg::Polyline{}, svg::Polyline{}},
+          .objects = {svg::Polyline{}, svg::Polyline{}, svg::Polyline{}},
           .want = SVG_DOC(DEFAULT_POLYLINE DEFAULT_POLYLINE DEFAULT_POLYLINE)
       },
       TestCase{
           .name = "Several texts",
-          .figures = {svg::Text{}, svg::Text{}, svg::Text{}, svg::Text{},
+          .objects = {svg::Text{}, svg::Text{}, svg::Text{}, svg::Text{},
                       svg::Text{}},
           .want = SVG_DOC(
                       DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT
@@ -559,7 +559,7 @@ TEST(TestDocument, TestDocument) {
       },
       TestCase{
           .name = "Several rectangles",
-          .figures = {svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
+          .objects = {svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
                       svg::Rectangle{}, svg::Rectangle{}},
           .want = SVG_DOC(
                       DEFAULT_RECTANGLE DEFAULT_RECTANGLE DEFAULT_RECTANGLE
@@ -567,7 +567,7 @@ TEST(TestDocument, TestDocument) {
       },
       TestCase{
           .name = "Several sections",
-          .figures = {svg::SectionBuilder{}.Build(),
+          .objects = {svg::SectionBuilder{}.Build(),
                       svg::SectionBuilder{}
                           .Add(svg::Circle{})
                           .Add(svg::Text{})
@@ -581,8 +581,8 @@ TEST(TestDocument, TestDocument) {
                       DEFAULT_RECTANGLE)
       },
       TestCase{
-          .name = "Different figures",
-          .figures = {svg::Circle{}, svg::Polyline{}, svg::Circle{},
+          .name = "Different objects",
+          .objects = {svg::Circle{}, svg::Polyline{}, svg::Circle{},
                       svg::Text{}, svg::Rectangle{},
                       svg::SectionBuilder{}.Add(svg::Polyline{}).Build(),
                       svg::Rectangle{}},
@@ -593,10 +593,10 @@ TEST(TestDocument, TestDocument) {
       },
   };
 
-  for (auto &[name, figures, want] : test_cases) {
+  for (auto &[name, objects, want] : test_cases) {
     svg::Document doc;
-    for (auto &figure : figures) {
-      doc.Add(std::move(figure));
+    for (auto &object : objects) {
+      doc.Add(std::move(object));
     }
 
     std::ostringstream ss;

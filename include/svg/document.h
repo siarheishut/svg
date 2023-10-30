@@ -11,8 +11,8 @@ class Document {
  public:
   Document() = default;
 
-  void Add(const Object &figure);
-  void Add(Object &&figure);
+  void Add(const Object &object);
+  void Add(Object &&object);
   void Render(std::ostream &out) const;
 
  private:
