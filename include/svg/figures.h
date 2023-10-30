@@ -85,7 +85,7 @@ class Figure {
   std::optional<std::string> linejoin_;
 };
 
-class Circle : public Figure<Circle> {
+class Circle final : public Figure<Circle> {
  public:
   Circle() = default;
 
@@ -99,7 +99,7 @@ class Circle : public Figure<Circle> {
   double radius_ = 1.0;
 };
 
-class Polyline : public Figure<Polyline> {
+class Polyline final : public Figure<Polyline> {
  public:
   Polyline() = default;
 
@@ -111,7 +111,7 @@ class Polyline : public Figure<Polyline> {
   std::vector<Point> points_;
 };
 
-class Text : public Figure<Text> {
+class Text final : public Figure<Text> {
  public:
   Text() = default;
 
@@ -136,7 +136,7 @@ class Text : public Figure<Text> {
   std::string text_;
 };
 
-class Rectangle : public Figure<Rectangle> {
+class Rectangle final : public Figure<Rectangle> {
  public:
   Rectangle() = default;
 
@@ -152,7 +152,7 @@ class Rectangle : public Figure<Rectangle> {
   double height_ = 0;
 };
 
-class Section {
+class Section final {
  public:
   friend class SectionBuilder;
   void Render(std::ostream &out) const;
@@ -163,7 +163,7 @@ class Section {
   std::shared_ptr<std::vector<Object>> objects_;
 };
 
-class SectionBuilder {
+class SectionBuilder final {
  public:
   SectionBuilder &Add(const Object &object);
   SectionBuilder &Add(Object &&object);
