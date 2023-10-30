@@ -1,10 +1,12 @@
 #include "svg/figures.h"
 
-#include <ostream>
-#include <utility>
 #include <cstdint>
-#include <string>
 #include <memory>
+#include <ostream>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
 
 #include "svg/common.h"
 
