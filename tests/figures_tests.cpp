@@ -41,18 +41,42 @@ TEST(TestFigures, TestCircle) {
           .want = SVG_DOC(DEFAULT_CIRCLE)
       },
       TestCase{
-          .name = "Set fill-color",
+          .name = "Set fill-color(rvalue-ref)",
           .circle = svg::Circle{}.SetFillColor(svg::Color{"red"}),
           .want = SVG_DOC(
                       "<circle fill=\"red\" stroke=\"none\" stroke-width=\"1\" "
                       "cx=\"0\" cy=\"0\" r=\"1\"/>")
       },
       TestCase{
-          .name = "Set stroke-color",
+          .name = "Set fill-color(lvalue-ref)",
+          .circle = [] {
+            svg::Circle circle;
+            svg::Color color = "red";
+            circle.SetFillColor(color);
+            return circle;
+          }(),
+          .want = SVG_DOC(
+                      "<circle fill=\"red\" stroke=\"none\" stroke-width=\"1\" "
+                      "cx=\"0\" cy=\"0\" r=\"1\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-color(rvalue-ref)",
           .circle = svg::Circle{}.SetStrokeColor(svg::Color{"blue"}),
           .want = SVG_DOC(
                       "<circle fill=\"none\" stroke=\"blue\" "
                       "stroke-width=\"1\" cx=\"0\" cy=\"0\" r=\"1\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-color(lvalue-ref)",
+          .circle = [] {
+            svg::Circle circle;
+            svg::Color color = "blue";
+            circle.SetStrokeColor(color);
+            return circle;
+          }(),
+          .want = SVG_DOC(
+                      "<circle fill=\"none\" stroke=\"blue\" stroke-width=\"1\""
+                      " cx=\"0\" cy=\"0\" r=\"1\"/>")
       },
       TestCase{
           .name = "Set stroke-width",
@@ -62,7 +86,7 @@ TEST(TestFigures, TestCircle) {
                       "stroke-width=\"4.5\" cx=\"0\" cy=\"0\" r=\"1\"/>")
       },
       TestCase{
-          .name = "Set stroke-linecap",
+          .name = "Set stroke-linecap(rvalue-ref)",
           .circle = svg::Circle{}.SetStrokeLineCap("default"),
           .want = SVG_DOC(
                       "<circle fill=\"none\" stroke=\"none\" "
@@ -70,8 +94,34 @@ TEST(TestFigures, TestCircle) {
                       "cx=\"0\" cy=\"0\" r=\"1\"/>")
       },
       TestCase{
-          .name = "Set stroke-linejoin",
+          .name = "Set stroke-linecap(lvalue-ref)",
+          .circle = [] {
+            svg::Circle circle;
+            std::string linecap = "default";
+            circle.SetStrokeLineCap(linecap);
+            return circle;
+          }(),
+          .want = SVG_DOC(
+                      "<circle fill=\"none\" stroke=\"none\" "
+                      "stroke-width=\"1\" stroke-linecap=\"default\" "
+                      "cx=\"0\" cy=\"0\" r=\"1\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(rvalue-ref)",
           .circle = svg::Circle{}.SetStrokeLineJoin("not-default"),
+          .want = SVG_DOC(
+                      "<circle fill=\"none\" stroke=\"none\" "
+                      "stroke-width=\"1\" stroke-linejoin=\"not-default\" "
+                      "cx=\"0\" cy=\"0\" r=\"1\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(lvalue-ref)",
+          .circle = [] {
+            svg::Circle circle;
+            std::string linejoin = "not-default";
+            circle.SetStrokeLineJoin(linejoin);
+            return circle;
+          }(),
           .want = SVG_DOC(
                       "<circle fill=\"none\" stroke=\"none\" "
                       "stroke-width=\"1\" stroke-linejoin=\"not-default\" "
@@ -136,7 +186,7 @@ TEST(TestFigures, TestPolyline) {
 
       },
       TestCase{
-          .name = "Set fill-color",
+          .name = "Set fill-color(rvalue-ref)",
           .polyline = svg::Polyline{}
               .SetFillColor(svg::Color{"color"}),
           .want = SVG_DOC(
@@ -144,9 +194,33 @@ TEST(TestFigures, TestPolyline) {
                       "stroke-width=\"1\" points=\"\"/>")
       },
       TestCase{
-          .name = "Set stroke-color",
+          .name = "Set fill-color(lvalue-ref)",
+          .polyline = [] {
+            svg::Polyline polyline;
+            svg::Color color = "color";
+            polyline.SetFillColor(color);
+            return polyline;
+          }(),
+          .want = SVG_DOC(
+                      "<polyline fill=\"color\" stroke=\"none\" "
+                      "stroke-width=\"1\" points=\"\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-color(rvalue-ref)",
           .polyline = svg::Polyline{}
               .SetStrokeColor(svg::Color{"color1"}),
+          .want = SVG_DOC(
+                      "<polyline fill=\"none\" stroke=\"color1\" "
+                      "stroke-width=\"1\" points=\"\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-color(lvalue-ref)",
+          .polyline = [] {
+            svg::Polyline polyline;
+            svg::Color color = "color1";
+            polyline.SetStrokeColor(color);
+            return polyline;
+          }(),
           .want = SVG_DOC(
                       "<polyline fill=\"none\" stroke=\"color1\" "
                       "stroke-width=\"1\" points=\"\"/>")
@@ -160,7 +234,7 @@ TEST(TestFigures, TestPolyline) {
                       "stroke-width=\"4.5\" points=\"\"/>")
       },
       TestCase{
-          .name = "Set stroke-linecap",
+          .name = "Set stroke-linecap(rvalue-ref)",
           .polyline = svg::Polyline{}
               .SetStrokeLineCap("default"),
           .want = SVG_DOC(
@@ -169,9 +243,35 @@ TEST(TestFigures, TestPolyline) {
                       "points=\"\"/>")
       },
       TestCase{
-          .name = "Set stroke-linejoin",
+          .name = "Set stroke-linecap(lvalue-ref)",
+          .polyline = [] {
+            svg::Polyline polyline;
+            std::string linecap = "default";
+            polyline.SetStrokeLineCap(linecap);
+            return polyline;
+          }(),
+          .want = SVG_DOC(
+                      "<polyline fill=\"none\" stroke=\"none\" "
+                      "stroke-width=\"1\" stroke-linecap=\"default\" "
+                      "points=\"\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(rvalue-ref)",
           .polyline = svg::Polyline{}
               .SetStrokeLineJoin("not-default"),
+          .want = SVG_DOC(
+                      "<polyline fill=\"none\" stroke=\"none\" "
+                      "stroke-width=\"1\" stroke-linejoin=\"not-default\" "
+                      "points=\"\"/>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(lvalue-ref)",
+          .polyline = [] {
+            svg::Polyline polyline;
+            std::string linejoin = "not-default";
+            polyline.SetStrokeLineJoin(linejoin);
+            return polyline;
+          }(),
           .want = SVG_DOC(
                       "<polyline fill=\"none\" stroke=\"none\" "
                       "stroke-width=\"1\" stroke-linejoin=\"not-default\" "
@@ -238,18 +338,44 @@ TEST(TestFigures, TestText) {
           .want = SVG_DOC(DEFAULT_TEXT)
       },
       TestCase{
-          .name = "Set fill-color",
+          .name = "Set fill-color(rvalue-ref)",
           .text = svg::Text{}
               .SetFillColor(svg::Rgba{1, 2, 3, 0.52}),
           .want = SVG_DOC(
-                      "<text fill=\"rgba(1,2,3,0.52)\" stroke=\"none\" stroke-width=\"1\" "
-                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
-                      "></text>")
+                      "<text fill=\"rgba(1,2,3,0.52)\" stroke=\"none\" "
+                      "stroke-width=\"1\" x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" "
+                      "font-size=\"1\"></text>")
       },
       TestCase{
-          .name = "Set stroke-color",
+          .name = "Set fill-color(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            svg::Color color = svg::Rgba{1, 2, 3, 0.52};
+            text.SetFillColor(color);
+            return text;
+          }(),
+          .want = SVG_DOC(
+                      "<text fill=\"rgba(1,2,3,0.52)\" stroke=\"none\" "
+                      "stroke-width=\"1\" x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" "
+                      "font-size=\"1\"></text>")
+      },
+      TestCase{
+          .name = "Set stroke-color(rvalue-ref)",
           .text = svg::Text{}
               .SetStrokeColor(svg::Color{"color1"}),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"color1\" "
+                      "stroke-width=\"1\" x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" "
+                      "font-size=\"1\"></text>")
+      },
+      TestCase{
+          .name = "Set stroke-color(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            svg::Color color = "color1";
+            text.SetStrokeColor(color);
+            return text;
+          }(),
           .want = SVG_DOC(
                       "<text fill=\"none\" stroke=\"color1\" "
                       "stroke-width=\"1\" x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" "
@@ -265,7 +391,7 @@ TEST(TestFigures, TestText) {
                       "font-size=\"1\"></text>")
       },
       TestCase{
-          .name = "Set stroke-linecap",
+          .name = "Set stroke-linecap(rvalue-ref)",
           .text = svg::Text{}
               .SetStrokeLineCap("linecap1"),
           .want = SVG_DOC(
@@ -274,9 +400,35 @@ TEST(TestFigures, TestText) {
                       "dx=\"0\" dy=\"0\" font-size=\"1\"></text>")
       },
       TestCase{
-          .name = "Set stroke-linejoin",
+          .name = "Set stroke-linecap(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            std::string linecap = "linecap1";
+            text.SetStrokeLineCap(linecap);
+            return text;
+          }(),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "stroke-linecap=\"linecap1\" x=\"0\" y=\"0\" "
+                      "dx=\"0\" dy=\"0\" font-size=\"1\"></text>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(rvalue-ref)",
           .text = svg::Text{}
               .SetStrokeLineJoin("not-default"),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "stroke-linejoin=\"not-default\" x=\"0\" y=\"0\" "
+                      "dx=\"0\" dy=\"0\" font-size=\"1\"></text>")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            std::string linejoin = "not-default";
+            text.SetStrokeLineJoin(linejoin);
+            return text;
+          }(),
           .want = SVG_DOC(
                       "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
                       "stroke-linejoin=\"not-default\" x=\"0\" y=\"0\" "
@@ -310,7 +462,7 @@ TEST(TestFigures, TestText) {
                       "></text>")
       },
       TestCase{
-          .name = "Set font-weight",
+          .name = "Set font-weight(rvalue-ref)",
           .text = svg::Text{}
               .SetFontWeight("bold"),
           .want = SVG_DOC(
@@ -319,9 +471,57 @@ TEST(TestFigures, TestText) {
                       "font-weight=\"bold\"></text>")
       },
       TestCase{
-          .name = "Set data",
+          .name = "Set font-weight(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            std::string weight = "bold";
+            text.SetFontWeight(weight);
+            return text;
+          }(),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\" "
+                      "font-weight=\"bold\"></text>")
+      },
+      TestCase{
+          .name = "Set font-family(rvalue-ref)",
+          .text = svg::Text{}
+              .SetFontFamily("some_family"),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\" "
+                      "font-family=\"some_family\"></text>")
+      },
+      TestCase{
+          .name = "Set font-family(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            std::string fam = "some_family";
+            text.SetFontFamily(fam);
+            return text;
+          }(),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\" "
+                      "font-family=\"some_family\"></text>")
+      },
+      TestCase{
+          .name = "Set data(rvalue-ref)",
           .text = svg::Text{}
               .SetData("some text"),
+          .want = SVG_DOC(
+                      "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                      "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
+                      ">some text</text>")
+      },
+      TestCase{
+          .name = "Set data(lvalue-ref)",
+          .text = [] {
+            svg::Text text;
+            std::string data = "some text";
+            text.SetData(data);
+            return text;
+          }(),
           .want = SVG_DOC(
                       "<text fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
                       "x=\"0\" y=\"0\" dx=\"0\" dy=\"0\" font-size=\"1\""
@@ -399,7 +599,7 @@ TEST(TestFigures, TestRectangle) {
                           "fill=\"none\" stroke=\"none\" stroke-width=\"1\" />")
       },
       TestCase{
-          .name = "Set fill-color",
+          .name = "Set fill-color(rvalue-ref)",
           .rect = svg::Rectangle{}
               .SetFillColor(svg::Rgba{3, 2, 1, 0.4}),
           .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
@@ -407,9 +607,33 @@ TEST(TestFigures, TestRectangle) {
                           "stroke-width=\"1\" />")
       },
       TestCase{
-          .name = "Set stroke-color",
+          .name = "Set fill-color(lvalue-ref)",
+          .rect = [] {
+            svg::Rectangle rectangle;
+            svg::Color color = svg::Rgba{3, 2, 1, 0.4};
+            rectangle.SetFillColor(color);
+            return rectangle;
+          }(),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"rgba(3,2,1,0.4)\" stroke=\"none\" "
+                          "stroke-width=\"1\" />")
+      },
+      TestCase{
+          .name = "Set stroke-color(rvalue-ref)",
           .rect = svg::Rectangle{}
               .SetStrokeColor(svg::Color{"color"}),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"color\" stroke-width=\"1\""
+                          " />")
+      },
+      TestCase{
+          .name = "Set stroke-color(lvalue-ref)",
+          .rect = [] {
+            svg::Rectangle rectangle;
+            svg::Color color = "color";
+            rectangle.SetStrokeColor(color);
+            return rectangle;
+          }(),
           .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
                           "fill=\"none\" stroke=\"color\" stroke-width=\"1\""
                           " />")
@@ -423,7 +647,7 @@ TEST(TestFigures, TestRectangle) {
                           "/>")
       },
       TestCase{
-          .name = "Set stroke-linecap",
+          .name = "Set stroke-linecap(rvalue-ref)",
           .rect = svg::Rectangle{}
               .SetStrokeLineCap("linecap"),
           .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
@@ -431,9 +655,33 @@ TEST(TestFigures, TestRectangle) {
                           "stroke-linecap=\"linecap\" />")
       },
       TestCase{
-          .name = "Set stroke-linejoin",
+          .name = "Set stroke-linecap(lvalue-ref)",
+          .rect = [] {
+            svg::Rectangle rectangle;
+            std::string linecap = "linecap";
+            rectangle.SetStrokeLineCap(linecap);
+            return rectangle;
+          }(),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                          "stroke-linecap=\"linecap\" />")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(rvalue-ref)",
           .rect = svg::Rectangle{}
               .SetStrokeLineJoin("linejoin"),
+          .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
+                          "fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
+                          "stroke-linejoin=\"linejoin\" />")
+      },
+      TestCase{
+          .name = "Set stroke-linejoin(lvalue-ref)",
+          .rect = [] {
+            svg::Rectangle rectangle;
+            std::string linejoin = "linejoin";
+            rectangle.SetStrokeLineJoin(linejoin);
+            return rectangle;
+          }(),
           .want = SVG_DOC("<rect x=\"0\" y=\"0\" width=\"0\" height=\"0\" "
                           "fill=\"none\" stroke=\"none\" stroke-width=\"1\" "
                           "stroke-linejoin=\"linejoin\" />")
@@ -472,6 +720,7 @@ TEST(TestSection, TestSection) {
   struct TestCase {
     std::string name;
     std::vector<svg::Object> objects;
+    bool is_rvalue;
     std::string want;
   };
 
@@ -479,6 +728,12 @@ TEST(TestSection, TestSection) {
       TestCase{
           .name = "Empty section",
           .want = SVG_DOC()
+      },
+      TestCase{
+          .name = "Base case(lvalue-ref)",
+          .objects = {svg::Circle{}, svg::Text{}, svg::Text{}},
+          .is_rvalue = false,
+          .want = SVG_DOC(DEFAULT_CIRCLE DEFAULT_TEXT DEFAULT_TEXT)
       },
       TestCase{
           .name = "Base case",
@@ -496,6 +751,7 @@ TEST(TestSection, TestSection) {
                           .Build(),
                       svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
                       svg::Text{}, svg::Text{}, svg::Text{}},
+          .is_rvalue = true,
           .want = SVG_DOC(DEFAULT_CIRCLE DEFAULT_CIRCLE DEFAULT_CIRCLE
                               DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT
                               DEFAULT_CIRCLE DEFAULT_TEXT DEFAULT_POLYLINE
@@ -506,10 +762,14 @@ TEST(TestSection, TestSection) {
       },
   };
 
-  for (auto &[name, objects, want] : test_cases) {
+  for (auto &[name, objects, is_rvalue, want] : test_cases) {
     svg::SectionBuilder builder;
     for (auto &object : objects) {
-      builder.Add(std::move(object));
+      if (is_rvalue) {
+        builder.Add(std::move(object));
+      } else {
+        builder.Add(object);
+      }
     }
 
     svg::Document doc;
@@ -526,6 +786,7 @@ TEST(TestDocument, TestDocument) {
   struct TestCase {
     std::string name;
     std::vector<svg::Object> objects;
+    bool is_rvalue;
     std::string want;
   };
 
@@ -536,9 +797,16 @@ TEST(TestDocument, TestDocument) {
           .want = SVG_DOC("")
       },
       TestCase{
+          .name = "Base case(lvalue-ref)",
+          .objects = {svg::Circle{}, svg::Polyline{}},
+          .is_rvalue = false,
+          .want = SVG_DOC(DEFAULT_CIRCLE DEFAULT_POLYLINE)
+      },
+      TestCase{
           .name = "Several circles",
           .objects = {svg::Circle{}, svg::Circle{}, svg::Circle{},
                       svg::Circle{}},
+          .is_rvalue = true,
           .want = SVG_DOC(
                       DEFAULT_CIRCLE DEFAULT_CIRCLE DEFAULT_CIRCLE
                       DEFAULT_CIRCLE)
@@ -546,12 +814,14 @@ TEST(TestDocument, TestDocument) {
       TestCase{
           .name = "Several polylines",
           .objects = {svg::Polyline{}, svg::Polyline{}, svg::Polyline{}},
+          .is_rvalue = true,
           .want = SVG_DOC(DEFAULT_POLYLINE DEFAULT_POLYLINE DEFAULT_POLYLINE)
       },
       TestCase{
           .name = "Several texts",
           .objects = {svg::Text{}, svg::Text{}, svg::Text{}, svg::Text{},
                       svg::Text{}},
+          .is_rvalue = true,
           .want = SVG_DOC(
                       DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT DEFAULT_TEXT
                       DEFAULT_TEXT)
@@ -561,6 +831,7 @@ TEST(TestDocument, TestDocument) {
           .name = "Several rectangles",
           .objects = {svg::Rectangle{}, svg::Rectangle{}, svg::Rectangle{},
                       svg::Rectangle{}, svg::Rectangle{}},
+          .is_rvalue = true,
           .want = SVG_DOC(
                       DEFAULT_RECTANGLE DEFAULT_RECTANGLE DEFAULT_RECTANGLE
                       DEFAULT_RECTANGLE DEFAULT_RECTANGLE)
@@ -576,6 +847,7 @@ TEST(TestDocument, TestDocument) {
                           .Add(svg::Polyline{})
                           .Add(svg::Rectangle{})
                           .Build()},
+          .is_rvalue = true,
           .want = SVG_DOC(
                       DEFAULT_CIRCLE DEFAULT_TEXT DEFAULT_POLYLINE
                       DEFAULT_RECTANGLE)
@@ -586,6 +858,7 @@ TEST(TestDocument, TestDocument) {
                       svg::Text{}, svg::Rectangle{},
                       svg::SectionBuilder{}.Add(svg::Polyline{}).Build(),
                       svg::Rectangle{}},
+          .is_rvalue = true,
           .want = SVG_DOC(
                       DEFAULT_CIRCLE DEFAULT_POLYLINE DEFAULT_CIRCLE
                       DEFAULT_TEXT DEFAULT_RECTANGLE DEFAULT_POLYLINE
@@ -593,10 +866,14 @@ TEST(TestDocument, TestDocument) {
       },
   };
 
-  for (auto &[name, objects, want] : test_cases) {
+  for (auto &[name, objects, is_rvalue, want] : test_cases) {
     svg::Document doc;
     for (auto &object : objects) {
-      doc.Add(std::move(object));
+      if (is_rvalue) {
+        doc.Add(std::move(object));
+      } else {
+        doc.Add(object);
+      }
     }
 
     std::ostringstream ss;
