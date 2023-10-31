@@ -9,6 +9,7 @@ according to https://www.w3.org/2000/svg requirements.
 2. `Polyline`: described by `vertex coordinates`.
 3. `Text`: described by `reference point coordinates`, `offset from
    reference point`, `font size`, `font family` and `text data`.</font>
+4. `Rectangle`: described by `coords of the upper left corner`, `width` and `height`.
 
 Moreover, all figures have the same common properties:
 `stroke color`, `fill color`, `stroke width`, `stroke linecap`and `stroke linejoin`.
@@ -67,7 +68,7 @@ Fields:
 
 Methods:
 
-| Method    | Parameter type | Description              | 
+| Method    | Parameter type | Description              |
 |-----------|----------------|--------------------------|
 | SetCenter | svg::Point     | Sets center coordinates. |
 | SetRadius | float          | Sets radius.             |
@@ -82,9 +83,9 @@ Fields:
 
 Methods:
 
-| Method   | Parameter type | Description                                                                               | 
-|----------|----------------|-------------------------------------------------------------------------------------------|
-| AddPoint | svg::Point     | Adds the point to polyline and connects this point with the previous one(if such exists). |
+| Method   | Parameter type | Description                                                                                   |
+|----------|----------------|-----------------------------------------------------------------------------------------------|
+| AddPoint | svg::Point     | Adds the point to the polyline and connects this point with the previous one(if such exists). |
 
 ### svg::Text
 
@@ -101,14 +102,32 @@ Fields:
 
 Methods:
 
-| Method        | Parameter type | Description                       | 
+| Method        | Parameter type | Description                       |
 |---------------|----------------|-----------------------------------|
 | SetPoint      | svg::Point     | Sets reference point coordinates. |
 | SetOffset     | svg::Point     | Sets offset from reference point. |
 | SetFontSize   | float          | Sets font size.                   |
 | SetFontFamily | std::string    | Sets font family.                 |
 | SetFontWeight | std::string    | Sets font weight.                 |
-| SetData       | std::string    | Sets text message.                |
+| SetData       | std::string    | Sets a text message.              |
+
+### svg::Rectangle
+
+Fields:
+
+| Field  | Type       | Value by default |
+|--------|------------|------------------|
+| point  | svg::Point | See above        |
+| width  | float      | 0                |
+| height | float      | 0                |
+
+Methods:
+
+| Method    | Parameter type | Description                                |
+|-----------|----------------|--------------------------------------------|
+| SetPoint  | svg::Point     | Sets the coords of the upper left corner . |
+| SetWidth  | float          | Sets width.                                |
+| SetHeight | float          | Sets height.                               |
 
 #### Common fields and methods:
 
@@ -120,7 +139,7 @@ Methods:
 | stroke linecap  | std::string | null             |
 | stroke linejoin | std::string | null             |
 
-| Method            | Parameter type | Description           | 
+| Method            | Parameter type | Description           |
 |-------------------|----------------|-----------------------|
 | SetStrokeColor    | svg::Point     | Sets stroke color.    |
 | SetFillColor      | svg::Point     | Sets fill color.      |
@@ -128,9 +147,24 @@ Methods:
 | SetStrokeLinecap  | std::string    | Sets stroke linecap.  |
 | SetStrokeLineJoin | std::string    | Sets stroke linejoin. |
 
+### svg::Section
+
+It doesn't have most properties listed above as it's not a figure.<br>
+A Section is a set of objects, such as Text, Circle, Section etc.<br>
+Section has the only one method Render, which renders all contained objects in the order they were added.
+
+How to use svg::Section:
+
+1. Create an object of type svg::SectionBuilder.
+2. Use the method `Add` of the builder to add all figures in a set.
+3. Use method `Build` of builder to obtain a `svg::Section` object.
+
+The purpose of Section is cheap copying of a set of objects without copying the objects themselves.
+
 ## Steps to generate SVG code.
 
 1. Create an object of `svg::Document` type(in the following steps that object will be called `doc`).
 2. Add all needed figures by repeatedly calling method `Add` on `doc` and passing the figure of
    any type.
-3. Call non-parameterized method `Render` on `doc`.
+3. Call the non-parameterized method `Render` on `doc`.
+
