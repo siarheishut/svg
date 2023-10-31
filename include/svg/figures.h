@@ -158,9 +158,9 @@ class Section final {
   void Render(std::ostream &out) const;
 
  private:
-  explicit Section(std::vector<Object> objects);
+  explicit Section(std::string rendered_data);
 
-  std::shared_ptr<std::vector<Object>> objects_;
+  std::shared_ptr<std::string> rendered_data_;
 };
 
 class SectionBuilder final {
